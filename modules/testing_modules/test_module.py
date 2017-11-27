@@ -7,7 +7,7 @@ import models.app_models.variable_models.date_variable_model as d_var
 import models.app_models.variable_models.float_variable_model as f_var
 import models.app_models.variable_models.int_variable_model as i_var
 import models.app_models.variable_models.string_variable_model as s_var
-import models.app_models.caatalog_models.catalog_model as catalog
+import models.app_models.catalog_models.catalog_model as catalog
 
 def create_skin_type_catalog():
     skin_catalog =catalog.Catalog("Каталог цветов кожи")

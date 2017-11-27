@@ -19,3 +19,4 @@ TEMP_FOLDER = ROOT_DIR+"/temp/"
 
 API_URL ="http://127.0.0.1:5000/"
 
+DB_URI = 'postgresql://postgres:12345678@localhost/cent'

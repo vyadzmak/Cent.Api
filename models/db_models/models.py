@@ -10,7 +10,7 @@ from sqlalchemy import Integer, ForeignKey, String, Column, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-import  models.app_models.object_models.object_model as object_model
+import  models.app_models.schema_models.schema_model as object_model
 import modules.json_modules.json_encoder as encoder
 import datetime
 
@@ -132,9 +132,7 @@ class Schemas(Base):
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
-
-        obj =object_model.Object(name,title,group_title,is_catalog)
-
+        obj =object_model.Schema(name, title, group_title, is_catalog)
         self.data =encoder.encode(obj)
 #objects
 class Objects(Base):

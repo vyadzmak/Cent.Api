@@ -1,4 +1,4 @@
-import models.app_models.object_models.object_model as object_model
+import models.app_models.schema_models.schema_model as object_model
 import modules.export_modules.exporter as exporter
 import models.app_models.field_models.field_model as field_model
 import copy
@@ -12,7 +12,7 @@ import models.app_models.catalog_models.catalog_model as catalog
 def create_skin_type_catalog():
     skin_catalog =catalog.Catalog("Каталог цветов кожи")
 
-    skin_object= object_model.Object("skin_object","Цвет кожи")
+    skin_object= object_model.Schema("skin_object", "Цвет кожи")
     skin_object.init_field(field_model.Field(len(skin_object.fields),"name","Наименование",field_model.FieldType.STRING,s_var.StringVar(not_null=True,min_length=3,max_length=32)))
 
     skins =['Белый','Черный','Желтый','Красный']
@@ -30,7 +30,7 @@ def create_skin_type_catalog():
 def create_gender_type_object(genders):
     gender_catalog = catalog.Catalog("Каталог полов")
 
-    gender_object = object_model.Object("gender_object", "Пол человека")
+    gender_object = object_model.Schema("gender_object", "Пол человека")
     gender_object.init_field(
         field_model.Field(len(gender_object.fields), "name", "Наименование", field_model.FieldType.STRING,
                           s_var.StringVar(not_null=True, min_length=3, max_length=10)))

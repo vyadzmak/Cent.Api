@@ -18,7 +18,7 @@ class Object():
         self.is_catalog = is_catalog
 
         self.u_id =str(uuid.uuid4())
-        #self.var_descritpions = v_description.VarDescriptions()
+        self.var_descritpions = v_description.VarDescriptions()
         # if (is_update==False):
         #     self.init_field(
         #         field_model.Field(len(self.fields), "name", "Наименование", field_model.FieldType.STRING.value,

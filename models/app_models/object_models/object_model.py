@@ -19,10 +19,10 @@ class Object():
 
         self.u_id =str(uuid.uuid4())
         #self.var_descritpions = v_description.VarDescriptions()
-        if (is_update==False):
-            self.init_field(
-                field_model.Field(len(self.fields), "name", "Наименование", field_model.FieldType.STRING.value,
-                                  s_var.StringVar(not_null=True, min_length=3, max_length=10)))
+        # if (is_update==False):
+        #     self.init_field(
+        #         field_model.Field(len(self.fields), "name", "Наименование", field_model.FieldType.STRING.value,
+        #                           s_var.StringVar(not_null=True, min_length=3, max_length=10)))
 
         if (group_title!= ""):
             self.group_title = group_title

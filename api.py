@@ -22,6 +22,7 @@ from res.users_resources import *
 from res.user_logins_resources import *
 from res.log_resources import *
 from res.upload_resources import *
+from res.schemas_resources import *
 
 #add resources
 #user roles
@@ -51,6 +52,12 @@ api.add_resource(LogListResource, '/log', endpoint='log')
 
 #upload files
 api.add_resource(UploadFile, '/upload', endpoint='upload')
+
+#schemas
+api.add_resource(SchemaListResource, '/schemas', endpoint='schemas')
+api.add_resource(SchemaResource, '/schema/<int:id>', endpoint='schema')
+
+#objects
 
 
 #start application

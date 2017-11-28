@@ -9,6 +9,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, ForeignKey, String, Column, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+
+import  models.app_models.object_models.object_model as object_model
+import modules.json_modules.json_encoder as encoder
 import datetime
 
 Base = declarative_base()
@@ -101,6 +104,57 @@ class Clients(Base):
         self.registration_date = datetime.datetime.now()
 
 
+
+
+#schemas
+class Schemas(Base):
+    __tablename__ = 'schemas'
+    id = Column('id', Integer, primary_key=True)
+    name = Column('name', String(32))
+    title = Column('title', String(32))
+    group_title = Column('group_title', String(32))
+    description = Column('description', String(500))
+    is_catalog = Column('is_catalog', Boolean)
+    data = Column(JSON)
+    client_id = Column('client_id', ForeignKey('clients.id'))
+    user_id = Column('user_id', ForeignKey('users.id'))
+    creation_date = Column('creation_date', DateTime)
+    update_date = Column('update_date', DateTime)
+
+    #
+    #user = relationship("Users", backref="client")
+    def __init__(self, name, title, group_title, description, is_catalog, client_id, user_id):
+        self.name=name
+        self.title = title
+        self.group_title=group_title
+        self.description=description
+        self.is_catalog=is_catalog
+        self.client_id = client_id
+        self.user_id = user_id
+        self.creation_date = datetime.datetime.now()
+
+        obj =object_model.Object(name,title,group_title,is_catalog)
+
+        self.data =encoder.encode(obj)
+#objects
+class Objects(Base):
+    __tablename__ = 'objects'
+    id = Column('id', Integer, primary_key=True)
+    data = Column(JSON)
+    client_id = Column('object_client_id', ForeignKey('clients.id'))
+    schema_id = Column('object_schema_id', ForeignKey('schemas.id'))
+    user_id = Column('object_user_id', ForeignKey('users.id'))
+    creation_date = Column('creation_date', DateTime)
+    update_date = Column('update_date', DateTime)
+
+    #
+    #user = relationship("Schemas", backref="schema")
+    def __init__(self,schema_id, data, client_id, user_id):
+        self.data = data
+        self.client_id = client_id
+        self.user_id = user_id
+        self.schema_id =schema_id
+        self.creation_date = datetime.datetime.now()
 
 
 if __name__ == "__main__":

@@ -9,14 +9,14 @@ class FieldType(Enum):
 
 #field for object
 class Field():
-    def __init__(self,obj_len,name,title,field_type, field_var):
+    def __init__(self,obj_len,name,title,field_type, field_var, inherited=False):
         self.index =obj_len+1
         self.title = title
         self.name =name
         self.field_type =field_type
         self.var =field_var
         self.value =""
-
+        self.inherited =inherited
         pass
 
 

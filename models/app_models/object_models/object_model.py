@@ -4,13 +4,23 @@ import models.app_models.variable_models.date_variable_model as d_var
 import models.app_models.variable_models.float_variable_model as f_var
 import models.app_models.variable_models.int_variable_model as i_var
 import models.app_models.variable_models.string_variable_model as s_var
+import models.app_models.variable_models.var_description_model as v_description
+import models.app_models.variable_models.general_var_models as g_model
 
+import uuid
 
 class Object():
-    def __init__(self, name,title):
+    def __init__(self, name, title, group_title="", is_catalog=False):
         self.fields =[]
         self.name = name
         self.title = title
+        self.group_title = title
+        self.is_catalog = is_catalog
+        self.u_id =str(uuid.uuid4())
+        self.var_descritpions = v_description.VarDescriptions()
+
+        if (group_title!= ""):
+            self.group_title = group_title
 
     def init_field(self,field):
         self.fields.append(field)

@@ -10,14 +10,19 @@ import models.app_models.variable_models.general_var_models as g_model
 import uuid
 
 class Object():
-    def __init__(self, name, title, group_title="", is_catalog=False):
+    def __init__(self, name, title, group_title="", is_catalog=False,is_update=False):
         self.fields =[]
         self.name = name
         self.title = title
         self.group_title = title
         self.is_catalog = is_catalog
+
         self.u_id =str(uuid.uuid4())
-        self.var_descritpions = v_description.VarDescriptions()
+        #self.var_descritpions = v_description.VarDescriptions()
+        if (is_update==False):
+            self.init_field(
+                field_model.Field(len(self.fields), "name", "Наименование", field_model.FieldType.STRING.value,
+                                  s_var.StringVar(not_null=True, min_length=3, max_length=10)))
 
         if (group_title!= ""):
             self.group_title = group_title

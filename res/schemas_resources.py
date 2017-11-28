@@ -2,7 +2,7 @@ from models.db_models.models import Schemas
 from db.db import session
 from flask import Flask, jsonify, request
 from flask_restful import Resource, fields, marshal_with, abort, reqparse
-
+import modules.db_converters.schema_data_converter as s_d_converter
 # client_type_fields = {
 #     'id': fields.Integer(attribute="id"),
 #     'name': fields.String(attribute="name")
@@ -56,6 +56,7 @@ class SchemaResource(Resource):
         schema.is_catalog = json_data["is_catalog"],
         schema.client_id = json_data["client_id"],
         schema.user_id = json_data["user_id"]
+        schema.data = s_d_converter.convert_schema_object(json_data)
         session.add(schema)
         session.commit()
         return schema, 201

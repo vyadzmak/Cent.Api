@@ -1,6 +1,4 @@
 class AddressVar():
-    def __init__(self,address="", lat=-1,long=-1):
-        self.address = address
-        self.lat = lat
-        self.long =long
+    def __init__(self,max_length=-1):
+        self.max_length =max_length
 

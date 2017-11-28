@@ -1,14 +1,4 @@
-import models.app_models.field_models.field_model as field_model
-import models.app_models.variable_models.boolean_variable_model as b_var
-import models.app_models.variable_models.date_variable_model as d_var
-import models.app_models.variable_models.float_variable_model as f_var
-import models.app_models.variable_models.int_variable_model as i_var
-import models.app_models.variable_models.string_variable_model as s_var
 import models.app_models.variable_models.var_description_model as v_description
-import models.app_models.variable_models.general_var_models as g_model
-
-import uuid
-
 
 class Schema():
     def __init__(self, name, title, group_title="", is_catalog=False, is_update=False):

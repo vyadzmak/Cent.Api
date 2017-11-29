@@ -85,11 +85,11 @@ def convert_schema_object(json_data):
     name = json_data['name']
     title = json_data["title"]
     group_title = json_data["group_title"]
-    is_catalog = json_data["is_catalog"]
+    schema_type_id = json_data["schema_type_id"]
     data = json_data["data"]
 
     fields = json.loads(data)["fields"]
-    ob = ob_model.Schema(name, title, group_title, is_catalog, True)
+    ob = ob_model.Schema(name, title, group_title, schema_type_id, True)
     ob.fields = []
 
     for field in fields:

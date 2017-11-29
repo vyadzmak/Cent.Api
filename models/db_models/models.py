@@ -4,6 +4,7 @@ from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import Date
 from sqlalchemy import DateTime
+
 from sqlalchemy import Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, ForeignKey, String, Column, JSON
@@ -132,6 +133,7 @@ class Schemas(Base):
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
+        self
         obj =object_model.Schema(name, title, group_title, schema_type_id)
         self.creation_date = datetime.datetime.now()
         self.update_date =datetime.datetime.now()

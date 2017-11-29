@@ -120,4 +120,4 @@ class SchemaListResource(Resource):
             session.commit()
             return schema, 201
         except Exception as e:
-            abort(400, message="Error while adding record Client")
+            abort(400, message="Error while adding record Schema")

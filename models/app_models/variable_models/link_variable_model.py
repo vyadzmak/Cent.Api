@@ -1,5 +1,5 @@
 class LinkVar():
-    def __init__(self,title="", uid=""):
+    def __init__(self,title="", schema_id=""):
         self.title =title
-        self.uid = uid
+        self.schema_id = schema_id
 

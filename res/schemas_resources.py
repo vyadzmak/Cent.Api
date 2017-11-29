@@ -4,11 +4,11 @@ from flask import Flask, jsonify, request
 from flask_restful import Resource, fields, marshal_with, abort, reqparse
 import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
+import datetime
 schema_type_fields = {
     'id': fields.Integer(),
     'name': fields.String(),
     'title': fields.String()
-
 }
 
 schema_fields = {
@@ -23,9 +23,6 @@ schema_fields = {
     'creation_date': fields.DateTime,
     'update_date': fields.DateTime,
     'data': fields.String
-
-    #'client_type': fields.Nested(client_type_fields)
-
 }
 
 class SchemaTypesListResource(Resource):
@@ -63,6 +60,7 @@ class SchemaResource(Resource):
         schema.schema_type_id = json_data["schema_type_id"],
         schema.client_id = json_data["client_id"],
         schema.user_id = json_data["user_id"]
+        schema.update_date =datetime.datetime.now()
         schema.data = s_d_converter.convert_schema_object(json_data)
         session.add(schema)
         session.commit()

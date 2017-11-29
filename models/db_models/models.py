@@ -132,7 +132,9 @@ class Schemas(Base):
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
-        obj =object_model.Schema(name, title, group_title, is_catalog)
+        obj =object_model.Schema(name, title, group_title, schema_type_id)
+        self.creation_date = datetime.datetime.now()
+        self.update_date =datetime.datetime.now()
         self.data =encoder.encode(obj)
 #objects
 class Objects(Base):

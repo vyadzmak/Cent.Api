@@ -17,7 +17,7 @@ schema_fields = {
     'title': fields.String,
     'group_title': fields.String,
     'description': fields.String,
-    'is_catalog': fields.Boolean,
+    'schema_type_id': fields.Integer,
     'client_id': fields.Integer,
     'user_id': fields.Integer,
     'creation_date': fields.DateTime,
@@ -60,7 +60,7 @@ class SchemaResource(Resource):
         schema.title = json_data["title"],
         schema.group_title = json_data["group_title"],
         schema.description = json_data["description"],
-        schema.is_catalog = json_data["is_catalog"],
+        schema.schema_type_id = json_data["schema_type_id"],
         schema.client_id = json_data["client_id"],
         schema.user_id = json_data["user_id"]
         schema.data = s_d_converter.convert_schema_object(json_data)
@@ -87,7 +87,7 @@ class SchemaListResource(Resource):
                 title=json_data["title"],
                 group_title=json_data["group_title"],
                 description=json_data["description"],
-                is_catalog=json_data["is_catalog"],
+                schema_type_id=json_data["schema_type_id"],
                 client_id=json_data["client_id"],
                 user_id=json_data["user_id"],
 

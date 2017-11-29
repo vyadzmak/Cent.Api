@@ -114,7 +114,7 @@ class Schemas(Base):
     title = Column('title', String(32))
     group_title = Column('group_title', String(32))
     description = Column('description', String(500))
-    is_catalog = Column('is_catalog', Boolean)
+    schema_type_id = Column('schema_type_id', Integer)
     data = Column(JSON)
     client_id = Column('client_id', ForeignKey('clients.id'))
     user_id = Column('user_id', ForeignKey('users.id'))
@@ -123,12 +123,12 @@ class Schemas(Base):
 
     #
     #user = relationship("Users", backref="client")
-    def __init__(self, name, title, group_title, description, is_catalog, client_id, user_id):
+    def __init__(self, name, title, group_title, description, schema_type_id, client_id, user_id):
         self.name=name
         self.title = title
         self.group_title=group_title
         self.description=description
-        self.is_catalog=is_catalog
+        self.schema_type_id=schema_type_id
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()

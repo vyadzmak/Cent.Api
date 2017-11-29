@@ -55,6 +55,7 @@ api.add_resource(UploadFile, '/upload', endpoint='upload')
 
 #schemas
 api.add_resource(SchemaListResource, '/schemas', endpoint='schemas')
+api.add_resource(SchemaTypesListResource, '/schemaTypes', endpoint='schemasTypes')
 api.add_resource(SchemaResource, '/schema/<int:id>', endpoint='schema')
 
 #objects

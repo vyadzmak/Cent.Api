@@ -1,17 +1,35 @@
 import models.app_models.variable_models.var_description_model as v_description
+from enum import Enum
+
+class SchemaType():
+    def __init__(self,id,name,title):
+        self.id = id
+        self.name = name
+        self.title = title
 
 class Schema():
-    def __init__(self, name, title, group_title="", is_catalog=False, is_update=False):
+    def __init__(self, name, title, group_title="", schema_type_id=0, is_update=False):
         self.fields = []
         self.name = name
         self.title = title
         self.group_title = title
-        self.is_catalog = is_catalog
 
         self.var_descritpions = v_description.VarDescriptions()
+        self.schema_type_id =schema_type_id
+        self.schema_types =[]
 
+        self.init_schema_types()
         if (group_title != ""):
             self.group_title = group_title
+
+    def init_schema_type(self,id,name,title):
+        self.schema_types.append(SchemaType(id,name,title))
+
+    def init_schema_types(self):
+        self.init_schema_type(0,'OBJECT','Объект')
+        self.init_schema_type(1,'SUBJECT','Субъект')
+        self.init_schema_type(2,'DOCUMENT','Документ')
+        self.init_schema_type(3,'CATALOG','Справочник')
 
     def init_field(self, field):
         self.fields.append(field)

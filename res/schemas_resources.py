@@ -3,10 +3,13 @@ from db.db import session
 from flask import Flask, jsonify, request
 from flask_restful import Resource, fields, marshal_with, abort, reqparse
 import modules.db_converters.schema_data_converter as s_d_converter
-# client_type_fields = {
-#     'id': fields.Integer(attribute="id"),
-#     'name': fields.String(attribute="name")
-# }
+import models.app_models.schema_models.schema_model as s_model
+schema_type_fields = {
+    'id': fields.Integer(),
+    'name': fields.String(),
+    'title': fields.String()
+
+}
 
 schema_fields = {
     'id': fields.Integer,
@@ -25,7 +28,11 @@ schema_fields = {
 
 }
 
-
+class SchemaTypesListResource(Resource):
+    @marshal_with(schema_type_fields)
+    def get(self):
+        schema_type_list = s_model.Schema("types","types")
+        return schema_type_list.schema_types
 
 
 

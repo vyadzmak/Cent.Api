@@ -5,6 +5,8 @@ from flask_restful import Resource, fields, marshal_with, abort, reqparse
 import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
 import datetime
+from sqlalchemy import and_
+
 schema_type_fields = {
     'id': fields.Integer(),
     'name': fields.String(),
@@ -25,12 +27,37 @@ schema_fields = {
     'data': fields.String
 }
 
+
+class SchemaCatalogsListResource(Resource):
+    @marshal_with(schema_fields)
+    def get(self, clientId):
+        schemas = session.query(Schemas).filter(
+            and_(Schemas.schema_type_id == 3,
+                 Schemas.client_id == clientId)
+        ).all()
+        if not schemas:
+            abort(404, message="Schemas not found")
+        return schemas
+
+
+
+class SchemaLinkListResource(Resource):
+    @marshal_with(schema_fields)
+    def get(self, clientId):
+        schemas = session.query(Schemas).filter(and_
+                                                (Schemas.schema_type_id != 3),
+                                                (Schemas.client_id == clientId)
+                                                ).all()
+        if not schemas:
+            abort(404, message="Schemas not found")
+        return schemas
+
+
 class SchemaTypesListResource(Resource):
     @marshal_with(schema_type_fields)
     def get(self):
-        schema_type_list = s_model.Schema("types","types")
+        schema_type_list = s_model.Schema("types", "types")
         return schema_type_list.schema_types
-
 
 
 class SchemaResource(Resource):
@@ -60,7 +87,7 @@ class SchemaResource(Resource):
         schema.schema_type_id = json_data["schema_type_id"],
         schema.client_id = json_data["client_id"],
         schema.user_id = json_data["user_id"]
-        schema.update_date =datetime.datetime.now()
+        schema.update_date = datetime.datetime.now()
         schema.data = s_d_converter.convert_schema_object(json_data)
         session.add(schema)
         session.commit()
@@ -78,8 +105,7 @@ class SchemaListResource(Resource):
         try:
             json_data = request.get_json(force=True)
 
-
-            #name, title, group_title, description, is_catalog, data, client_id, user_id
+            # name, title, group_title, description, is_catalog, data, client_id, user_id
             schema = Schemas(
                 name=json_data["name"],
                 title=json_data["title"],

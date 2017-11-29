@@ -1,6 +1,6 @@
 #поля объекта
 class ObjectFields():
-    def __init__(self):
+    def __init__(self, name, title, value, schema_field):
         self.name =""
         self.title = ""
         self.value =""

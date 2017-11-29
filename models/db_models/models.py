@@ -11,7 +11,8 @@ from sqlalchemy import Integer, ForeignKey, String, Column, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-import  models.app_models.schema_models.schema_model as object_model
+import  models.app_models.schema_models.schema_model as schema_model
+import  models.app_models.object_models.object_model as object_model
 import modules.json_modules.json_encoder as encoder
 import datetime
 
@@ -133,8 +134,8 @@ class Schemas(Base):
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
-        self
-        obj =object_model.Schema(name, title, group_title, schema_type_id)
+
+        obj =schema_model.Schema(name, title, group_title, schema_type_id)
         self.creation_date = datetime.datetime.now()
         self.update_date =datetime.datetime.now()
         self.data =encoder.encode(obj)
@@ -151,13 +152,13 @@ class Objects(Base):
 
     #
     #user = relationship("Schemas", backref="schema")
-    def __init__(self,schema_id, data, client_id, user_id):
-        self.data = data
+    def __init__(self,schema_id,client_id, user_id):
+        self.data = "{}"
         self.client_id = client_id
         self.user_id = user_id
         self.schema_id =schema_id
         self.creation_date = datetime.datetime.now()
-
+        self.update_date = datetime.datetime.now()
 
 if __name__ == "__main__":
     from sqlalchemy import create_engine

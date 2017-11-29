@@ -64,6 +64,9 @@ api.add_resource(SchemaCatalogsListResource, '/schemaCatalogs/<int:clientId>', e
 #get to all schema links
 api.add_resource(SchemaLinkListResource, '/schemaLinks/<int:clientId>', endpoint='schemaLinks')
 
+#get to all schema by Client
+api.add_resource(SchemaClientListResource, '/schemaClients/<int:clientId>', endpoint='schemaClients')
+
 #objects
 
 

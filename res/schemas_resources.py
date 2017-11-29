@@ -40,13 +40,22 @@ class SchemaCatalogsListResource(Resource):
         return schemas
 
 
-
 class SchemaLinkListResource(Resource):
     @marshal_with(schema_fields)
     def get(self, clientId):
         schemas = session.query(Schemas).filter(and_
                                                 (Schemas.schema_type_id != 3),
                                                 (Schemas.client_id == clientId)
+                                                ).all()
+        if not schemas:
+            abort(404, message="Schemas not found")
+        return schemas
+
+
+class SchemaClientListResource(Resource):
+    @marshal_with(schema_fields)
+    def get(self, clientId):
+        schemas = session.query(Schemas).filter(Schemas.client_id == clientId
                                                 ).all()
         if not schemas:
             abort(404, message="Schemas not found")

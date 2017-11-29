@@ -35,17 +35,17 @@ def init_field(field, field_type):
 
         # DATETIME
     if (field_type == 3):
-        return d_var.DateVar(v["output_format"], v["not_null"])
+        return d_var.DateVar(v["not_null"],v["output_format"])
         pass
 
         # ADDRESS
     if (field_type == 4):
-        return a_var.AddressVar(v["address"], v["lat"], v["long"])
+        return a_var.AddressVar(v["not_null"], v["max_length"])
         pass
 
         # LINK
     if (field_type == 5):
-        return l_var.LinkVar(v["title"], v["uid"])
+        return l_var.LinkVar(v["title"], v["schema_id"])
         pass
 
         # BOOLEAN
@@ -65,7 +65,7 @@ def init_field(field, field_type):
 
         # CATALOG
     if (field_type == 9):
-        return c_var.CatalogVar(v["title"], v["uid"], v["selected_id"])
+        return c_var.CatalogVar(v["title"], v["schema_id"], v["selected_id"])
         pass
 
         # SINGLE_IMAGE

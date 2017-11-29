@@ -159,7 +159,7 @@ class Objects(Base):
         self.schema_id =schema_id
         self.creation_date = datetime.datetime.now()
         self.update_date = datetime.datetime.now()
-
+        #obj = object_model.Object()
 if __name__ == "__main__":
     from sqlalchemy import create_engine
     from models.app_models.setting_models.setting_model import DB_URI

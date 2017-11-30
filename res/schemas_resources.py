@@ -84,7 +84,7 @@ class SchemaResource(Resource):
         result_schema.data = items_converter.get_to_data_field_items(result_schema.data)
 
 
-        return schema
+        return result_schema
 
     def delete(self, id):
         schema = session.query(Schemas).filter(Schemas.id == id).first()

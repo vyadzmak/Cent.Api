@@ -31,6 +31,7 @@ class ObjectSchemaListResource(Resource):
     def get(self,schemaId):
         objects =  session.query(Objects).filter(Objects.schema_id == schemaId).all()
 
+
         result = dt_generator.generate_dynamic_table_by_objects(objects)
 
         return result

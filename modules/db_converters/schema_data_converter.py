@@ -79,7 +79,12 @@ def init_field(field, field_type):
         pass
 
     pass
-
+def check_arr_value(arr, name):
+    try:
+        v = arr[name]
+        return v
+    except:
+        return False
 
 def convert_schema_object(json_data):
     name = json_data['name']
@@ -95,8 +100,9 @@ def convert_schema_object(json_data):
     for field in fields:
         field_type = field["field_type"]
         f_var = init_field(field, field_type)
-
-        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var,field["is_index"],field["is_value"])
+        is_index =check_arr_value(field,"is_index")
+        is_value =check_arr_value(field,"is_value")
+        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var,is_index,is_value)
         ob.init_field(r_field)
     return encoder.encode(ob)
     pass

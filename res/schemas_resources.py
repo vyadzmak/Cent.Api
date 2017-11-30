@@ -6,7 +6,9 @@ import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
 import datetime
 from sqlalchemy import and_
+import copy
 
+import modules.db_converters.field_items_converter as items_converter
 schema_type_fields = {
     'id': fields.Integer(),
     'name': fields.String(),
@@ -73,8 +75,15 @@ class SchemaResource(Resource):
     @marshal_with(schema_fields)
     def get(self, id):
         schema = session.query(Schemas).filter(Schemas.id == id).first()
+
         if not schema:
             abort(404, message="Schema {} doesn't exist".format(id))
+
+        result_schema = copy.deepcopy(schema)
+
+        result_schema.data = items_converter.get_to_data_field_items(result_schema.data)
+
+
         return schema
 
     def delete(self, id):

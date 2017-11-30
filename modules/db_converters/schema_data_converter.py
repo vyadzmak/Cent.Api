@@ -65,7 +65,7 @@ def init_field(field, field_type):
 
         # CATALOG
     if (field_type == 9):
-        return c_var.CatalogVar(v["title"], v["schema_id"], v["selected_id"])
+        return c_var.CatalogVar(v["title"], v["schema_id"], v["multi_select"])
         pass
 
         # SINGLE_IMAGE
@@ -96,7 +96,7 @@ def convert_schema_object(json_data):
         field_type = field["field_type"]
         f_var = init_field(field, field_type)
 
-        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var)
+        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var,field["is_index"],field["is_value"])
         ob.init_field(r_field)
     return encoder.encode(ob)
     pass

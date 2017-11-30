@@ -20,5 +20,5 @@ class Object():
 
     def init_fields(self,fields):
         for field in fields:
-            self.fields.append(ObjectField(field.index,field.field_type,field.name,field.title,field.value,field.var))
+            self.fields.append(ObjectField(field["index"],field["field_type"],field["name"],field["title"],field["value"],field["var"]))
         pass

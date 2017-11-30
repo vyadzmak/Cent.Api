@@ -144,9 +144,9 @@ class Objects(Base):
     __tablename__ = 'objects'
     id = Column('id', Integer, primary_key=True)
     data = Column(JSON)
-    client_id = Column('object_client_id', ForeignKey('clients.id'))
-    schema_id = Column('object_schema_id', ForeignKey('schemas.id'))
-    user_id = Column('object_user_id', ForeignKey('users.id'))
+    client_id = Column('client_id', ForeignKey('clients.id'))
+    schema_id = Column('schema_id', ForeignKey('schemas.id'))
+    user_id = Column('user_id', ForeignKey('users.id'))
     creation_date = Column('creation_date', DateTime)
     update_date = Column('update_date', DateTime)
 

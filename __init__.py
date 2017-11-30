@@ -7,6 +7,11 @@ if __name__ == '__main__':
         model = dynamic_model.DynamicObject()
         model.id = '1'
         model.name = 'test'
+        s =""
+        model.s= '2'
+        model.values =[]
+        obj =dynamic_model.DynamicObject()
+        setattr(obj, 'some_attribute', 42);
         s = encoder.encode(model)
         testing.run_test()
     except Exception as e:

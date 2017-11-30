@@ -6,7 +6,7 @@ class ObjectField():
         self.name =name
         self.title = title
         self.value =value
-        self.display_value = value
+        self.output_value = str(value)
 
         pass
 

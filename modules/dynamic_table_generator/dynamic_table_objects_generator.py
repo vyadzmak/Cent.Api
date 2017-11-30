@@ -16,18 +16,14 @@ def generate_dynamic_table_by_objects(objects):
 
             break
 
-
-
         for ob in objects:
             items = []
             for field in ob.fields:
                 d_obj = dynamic_object.DynamicObject()
-                #d_obj.
-
-
-
-
-        return None
+                setattr(d_obj, field.name, field.output_value)
+                items.append(d_obj)
+            dt.init_item(items)
+        return dt
 
     except Exception as e:
         return None

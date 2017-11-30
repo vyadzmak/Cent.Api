@@ -7,8 +7,6 @@ def generate_dynamic_table_by_objects(objects):
         if (len(objects)==0):
             return None
 
-
-
         dt = dynamic_table.DynamicTable()
 
         #generate header
@@ -22,15 +20,15 @@ def generate_dynamic_table_by_objects(objects):
             break
 
         for ob in objects:
-            items = []
+            items = {}
             data = ob.data
             data = json.loads(data)
             fields = data["fields"]
+            d_obj = dynamic_object.DynamicObject()
             for field in fields:
-                d_obj = dynamic_object.DynamicObject()
                 setattr(d_obj, field["name"], field["output_value"])
-                items.append(d_obj)
-            dt.init_item(items)
+
+            dt.init_item(d_obj)
         return  encoder.encode(dt)
 
     except Exception as e:

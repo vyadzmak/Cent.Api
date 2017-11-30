@@ -23,6 +23,7 @@ from res.user_logins_resources import *
 from res.log_resources import *
 from res.upload_resources import *
 from res.schemas_resources import *
+from res.object_resources import *
 
 #add resources
 #user roles
@@ -68,7 +69,14 @@ api.add_resource(SchemaLinkListResource, '/schemaLinks/<int:clientId>', endpoint
 api.add_resource(SchemaClientListResource, '/schemaClients/<int:clientId>', endpoint='schemaClients')
 
 #objects
+#get to all objects
+api.add_resource(ObjectListResource, '/objects', endpoint='objects')
 
+#get to object
+api.add_resource(ObjectResource, '/object/<int:id>', endpoint='object')
+
+#get to schema objects
+api.add_resource(ObjectSchemaListResource, '/schemaObjects/<int:schemaId>', endpoint='schemaObjects')
 
 #start application
 if __name__ == '__main__':

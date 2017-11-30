@@ -5,6 +5,7 @@ from flask_restful import Resource, fields, marshal_with, abort, reqparse
 import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
 import datetime
+import modules.dynamic_table_generator.dynamic_table_objects_generator as dt_generator
 from sqlalchemy import and_
 
 schema_type_fields = {
@@ -22,6 +23,17 @@ object_fields = {
     'update_date': fields.DateTime,
     'data': fields.String
 }
+
+
+
+class ObjectSchemaListResource(Resource):
+    @marshal_with(object_fields)
+    def get(self,schema_id):
+        objects =  session.query(Objects).filter(Objects.schema_id == schema_id).all()
+
+        result = dt_generator.generate_dynamic_table_by_objects(objects)
+
+        return result
 
 
 

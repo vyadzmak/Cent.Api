@@ -8,12 +8,12 @@ class DynamicTableHeader():
 
 class DynamicTable():
     def __init__(self):
-        self.header =[]
+        self.headers =[]
         self.items =[]
         pass
 
     def init_header_element(self, text,align,value):
-        self.header.append(DynamicTableHeader(text,align,value))
+        self.headers.append(DynamicTableHeader(text, align, value))
 
     def init_item(self,item):
         self.items.append(item)

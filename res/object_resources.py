@@ -27,9 +27,9 @@ object_fields = {
 
 
 class ObjectSchemaListResource(Resource):
-    @marshal_with(object_fields)
-    def get(self,schema_id):
-        objects =  session.query(Objects).filter(Objects.schema_id == schema_id).all()
+    #@marshal_with(object_fields)
+    def get(self,schemaId):
+        objects =  session.query(Objects).filter(Objects.schema_id == schemaId).all()
 
         result = dt_generator.generate_dynamic_table_by_objects(objects)
 

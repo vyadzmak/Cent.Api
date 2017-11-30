@@ -152,14 +152,15 @@ class Objects(Base):
 
     #
     #user = relationship("Schemas", backref="schema")
-    def __init__(self,schema_id,client_id, user_id):
-        self.data = "{}"
+    def __init__(self,schema_id,client_id, user_id,parent_id, fields):
+
         self.client_id = client_id
         self.user_id = user_id
         self.schema_id =schema_id
         self.creation_date = datetime.datetime.now()
         self.update_date = datetime.datetime.now()
-        #obj = object_model.Object()
+        obj = object_model.Object(parent_id=parent_id,fields=fields)
+        self.data = encoder.encode(obj)
 if __name__ == "__main__":
     from sqlalchemy import create_engine
     from models.app_models.setting_models.setting_model import DB_URI

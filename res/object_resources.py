@@ -55,7 +55,7 @@ class ObjectResource(Resource):
         return object, 201
 
 
-class SchemaListResource(Resource):
+class ObjectListResource(Resource):
     @marshal_with(object_fields)
     def get(self):
         objects = session.query(Objects).all()
@@ -65,12 +65,12 @@ class SchemaListResource(Resource):
     def post(self):
         try:
             json_data = request.get_json(force=True)
-
-            # name, title, group_title, description, is_catalog, data, client_id, user_id
             object = Objects(
-                schema_id=json_data["schema_type_id"],
+                schema_id=json_data["schema_id"],
                 client_id=json_data["client_id"],
-                user_id=json_data["user_id"]
+                user_id=json_data["user_id"],
+                parent_id=json_data["parent_id"],
+                fields = json_data["fields"]
             )
             session.add(object)
             session.commit()

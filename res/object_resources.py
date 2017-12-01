@@ -1,12 +1,15 @@
 from models.db_models.models import Objects
 from db.db import session
 from flask import Flask, jsonify, request
+
 from flask_restful import Resource, fields, marshal_with, abort, reqparse
 import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
 import datetime
 import modules.dynamic_table_generator.dynamic_table_objects_generator as dt_generator
 from sqlalchemy import and_
+import  models.app_models.object_models.object_model as object_model
+import modules.json_modules.json_encoder as encoder
 
 schema_type_fields = {
     'id': fields.Integer(),
@@ -25,7 +28,6 @@ object_fields = {
 }
 
 
-
 class ObjectSchemaListResource(Resource):
     #@marshal_with(object_fields)
     def get(self,schemaId):
@@ -35,8 +37,6 @@ class ObjectSchemaListResource(Resource):
         result = dt_generator.generate_dynamic_table_by_objects(objects)
 
         return result
-
-
 
 class ObjectResource(Resource):
     @marshal_with(object_fields)
@@ -61,8 +61,12 @@ class ObjectResource(Resource):
         object.schema_id = json_data["schema_id"],
         object.client_id = json_data["client_id"],
         object.user_id = json_data["user_id"]
+        object.parent_id = json_data["parent_id"]
+        fields = json_data["fields"]
         object.update_date = datetime.datetime.now()
-        #object.data = s_d_converter.convert_schema_object(json_data)
+        obj = object_model.Object(parent_id=object.parent_id, fields=fields)
+        object.data = encoder.encode(obj)
+
         session.add(object)
         session.commit()
         return object, 201

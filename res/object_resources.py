@@ -10,7 +10,7 @@ import modules.dynamic_table_generator.dynamic_table_objects_generator as dt_gen
 from sqlalchemy import and_
 import  models.app_models.object_models.object_model as object_model
 import modules.json_modules.json_encoder as encoder
-
+from sqlalchemy import and_
 schema_type_fields = {
     'id': fields.Integer(),
     'name': fields.String(),
@@ -32,6 +32,23 @@ class ObjectSchemaListResource(Resource):
     #@marshal_with(object_fields)
     def get(self,schemaId):
         objects =  session.query(Objects).filter(Objects.schema_id == schemaId).all()
+
+
+        result = dt_generator.generate_dynamic_table_by_objects(objects)
+
+        return result
+
+class ObjectEntitySchemaListResource(Resource):
+    #@marshal_with(object_fields)
+    def post(self):
+
+        json_data = request.get_json(force=True)
+        parent_id = json_data["parent_id"]
+        schema_id = json_data["schema_id"]
+        objects =  session.query(Objects).filter(and_(
+            Objects.schema_id == schema_id,
+            Objects.parent_id ==parent_id)
+        ).all()
 
 
         result = dt_generator.generate_dynamic_table_by_objects(objects)

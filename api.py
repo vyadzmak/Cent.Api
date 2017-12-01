@@ -24,7 +24,7 @@ from res.log_resources import *
 from res.upload_resources import *
 from res.schemas_resources import *
 from res.object_resources import *
-
+from res.entity_resources import *
 #add resources
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
@@ -77,6 +77,12 @@ api.add_resource(ObjectResource, '/object/<int:id>', endpoint='object')
 
 #get to schema objects
 api.add_resource(ObjectSchemaListResource, '/schemaObjects/<int:schemaId>', endpoint='schemaObjects')
+
+#entity objects
+api.add_resource(ObjectEntitySchemaListResource, '/entityObjects', endpoint='entityObjects')
+
+
+api.add_resource(EntityResource, '/entityDetails/<int:id>', endpoint='entityDetails')
 
 #start application
 if __name__ == '__main__':

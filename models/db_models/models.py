@@ -149,7 +149,7 @@ class Objects(Base):
     user_id = Column('user_id', ForeignKey('users.id'))
     creation_date = Column('creation_date', DateTime)
     update_date = Column('update_date', DateTime)
-
+    parent_id = Column('parent_id', Integer)
     #
     #user = relationship("Schemas", backref="schema")
     def __init__(self,schema_id,client_id, user_id,parent_id, fields):
@@ -159,6 +159,7 @@ class Objects(Base):
         self.schema_id =schema_id
         self.creation_date = datetime.datetime.now()
         self.update_date = datetime.datetime.now()
+        self.parent_id = parent_id
         obj = object_model.Object(parent_id=parent_id,fields=fields)
         self.data = encoder.encode(obj)
 if __name__ == "__main__":

@@ -58,7 +58,6 @@ def convert_catalog(var,value):
 
         if (ex==True):
             for f in j["fields"]:
-
                 if (f["name"]==val_name):
                     return str(f["value"])
         p=p+1

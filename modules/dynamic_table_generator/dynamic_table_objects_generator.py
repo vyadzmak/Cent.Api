@@ -14,6 +14,7 @@ def generate_dynamic_table_by_objects(objects):
             data =ob.data
             data =  json.loads(data)
             fields =data["fields"]
+
             for field in fields:
                 dt.init_header_element(text=field["title"],align="center",value=field["name"])
 
@@ -25,6 +26,7 @@ def generate_dynamic_table_by_objects(objects):
             data = json.loads(data)
             fields = data["fields"]
             d_obj = dynamic_object.DynamicObject()
+            setattr(d_obj, "g_id", ob.id)
             for field in fields:
                 setattr(d_obj, field["name"], field["output_value"])
 

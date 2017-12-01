@@ -8,7 +8,7 @@ class ObjectField():
         self.title = title
         self.value =value
         self.output_value = output_value_converter.convert_output_value(type,var,value)
-        self.output_value = value
+        #self.output_value = value
         self.items = []
         pass
 

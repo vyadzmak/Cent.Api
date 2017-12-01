@@ -1,3 +1,8 @@
+import modules.db_helpers.schema_helper as schema_helper
+import modules.db_helpers.object_helper as object_helper
+
+import json
+
 def convert_string(var,value):
     v=var
     not_null =v["not_null"]
@@ -19,9 +24,33 @@ def convert_datetime():
     pass
 
 
-def convert_address():
+def convert_address(var,value):
     pass
 
+def convert_catalog(var,value):
+    schema_id =var["schema_id"]
+    schema = schema_helper.get_schema_by_id(schema_id)
+    objects =object_helper.get_objects_by_schema_id(schema_id)
+    if (objects==None or len(objects)==0):
+        return value
+    sj = json.loads(schema.data)
+
+    val_name =""
+
+    for f in sj["fields"]:
+        if (f["is_value"]==True and val_name==""):
+            val_name = f["name"]
+            break
+
+    for obj in objects:
+        j = json.loads(obj.data)
+        p = 0
+        for f in j["fields"]:
+            if (f["name"]==val_name):
+                return str(f["value"])
+    return value
+
+    pass
 
 def convert_output_value(field_type,var,value):
     try:
@@ -52,9 +81,9 @@ def convert_output_value(field_type,var,value):
         #     pass
         #
         #     # LINK
-        # if (field_type == 5):
-        #     return l_var.LinkVar(v["title"], v["schema_id"])
-        #     pass
+        if (field_type == 5):
+            return convert_catalog(var,value)
+            pass
         #
         #     # BOOLEAN
         # if (field_type == 6):
@@ -72,9 +101,9 @@ def convert_output_value(field_type,var,value):
         #     pass
         #
         #     # CATALOG
-        # if (field_type == 9):
-        #     return c_var.CatalogVar(v["title"], v["schema_id"], v["multi_select"])
-        #     pass
+        if (field_type == 9):
+            return convert_catalog(var,value)
+            pass
         #
         #     # SINGLE_IMAGE
         # if (field_type == 10):
@@ -85,7 +114,7 @@ def convert_output_value(field_type,var,value):
         # if (field_type == 11):
         #     return None
         #     pass
-
+        return value
     except Exception as e:
         return value
 

@@ -36,18 +36,32 @@ def convert_catalog(var,value):
     sj = json.loads(schema.data)
 
     val_name =""
-
+    index =-1
     for f in sj["fields"]:
         if (f["is_value"]==True and val_name==""):
             val_name = f["name"]
             break
 
+    for f in sj["fields"]:
+        if (f["is_index"]==True and index==-1):
+            index = f["index"]
+            break
+    p = 0
     for obj in objects:
         j = json.loads(obj.data)
-        p = 0
+
+        ex =False
         for f in j["fields"]:
-            if (f["name"]==val_name):
-                return str(f["value"])
+            if (f["name"]=="id" and f["value"]==value):
+                ex =True
+                break
+
+        if (ex==True):
+            for f in j["fields"]:
+
+                if (f["name"]==val_name):
+                    return str(f["value"])
+        p=p+1
     return value
 
     pass

@@ -58,8 +58,8 @@ class ObjectResource(Resource):
     def put(self, id):
         json_data = request.get_json(force=True)
         object = session.query(Objects).filter(Objects.id == id).first()
-        object.schema_id = json_data["schema_id"],
-        object.client_id = json_data["client_id"],
+        object.schema_id = json_data["schema_id"]
+        object.client_id = json_data["client_id"]
         object.user_id = json_data["user_id"]
         object.parent_id = json_data["parent_id"]
         fields = json_data["fields"]

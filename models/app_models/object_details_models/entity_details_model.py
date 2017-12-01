@@ -58,15 +58,15 @@ class EntityDetails():
         pass
 
     def init_subjects_section(self):
-        self.objects_section.items = entity_helper.get_items(self.id, 1)
+        self.subjects_section.items = entity_helper.get_items(self.id, 1)
         pass
 
     def init_documents_section(self):
-        self.objects_section.items = entity_helper.get_items(self.id, 2)
+        self.documents_section.items = entity_helper.get_items(self.id, 2)
         pass
 
     def init_relations_section(self):
-        self.objects_section.items = entity_helper.get_items(self.id, 4)
+        self.relations_section.items = entity_helper.get_items(self.id, 4)
         pass
 
     def init_history_section(self):

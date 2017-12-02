@@ -102,7 +102,8 @@ def convert_schema_object(json_data):
         f_var = init_field(field, field_type)
         is_index =check_arr_value(field,"is_index")
         is_value =check_arr_value(field,"is_value")
-        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var,is_index,is_value)
+        is_visible =check_arr_value(field,"is_visible")
+        r_field = field_model.Field(len(ob.fields), field["name"], field["title"], field_type, f_var,is_index,is_value,is_visible)
         ob.init_field(r_field)
     return encoder.encode(ob)
     pass

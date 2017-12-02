@@ -28,7 +28,7 @@ class FieldType(Enum):
 #         self.init_variable(11, "IMAGES", "Галлерея изображений",None, True)
 #field for object
 class Field():
-    def __init__(self,obj_len,name,title,field_type, field_var,is_index=False,is_value=False, inherited=False):
+    def __init__(self,obj_len,name,title,field_type, field_var,is_index=False,is_value=False,is_visible=True, inherited=False):
         self.index =obj_len+1
         self.title = title
         self.name =name
@@ -38,6 +38,7 @@ class Field():
         self.inherited =inherited
         self.is_index =is_index
         self.is_value = is_value
+        self.is_visible = is_visible
         pass
 
 

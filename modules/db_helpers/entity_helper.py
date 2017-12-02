@@ -3,18 +3,12 @@ import json
 import models.app_models.dynamic_object_models.dynamic_object_model as d_object
 def get_entity_fields_by_id(id):
     from models.db_models.models import Objects
-
-
     object = session.query(Objects).filter(Objects.id == id).first()
-
-
     return object.data
     pass
 
 
 def get_items(object_id, type_id):
-
-
     from models.db_models.models import Schemas
     from models.db_models.models import Objects
     items = []
@@ -37,24 +31,6 @@ def get_items(object_id, type_id):
                 setattr(ob, 'id', id)
                 setattr(ob, 'name', nm)
                 items.append(ob)
-
-
     return items
-
-
-
 pass
 
-#
-# def get_objects_by_parent_id(parent_id):
-#     from models.db_models.models import Objects
-#     objects = session.query(Objects).filter(Objects.parent_id==parent_id).all()
-#     return objects
-#
-# def get_objects_by_parent_id_and_type(parent_id,type_id):
-#     from models.db_models.models import Objects
-#     objects = session.query(Objects).filter(Objects.parent_id==parent_id).all()
-
-
-
-#  return objects

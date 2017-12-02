@@ -30,6 +30,7 @@ class Schema():
         self.init_schema_type(1,'SUBJECT','Субъект')
         self.init_schema_type(2,'DOCUMENT','Документ')
         self.init_schema_type(3,'CATALOG','Справочник')
+        self.init_schema_type(4,'RELATION','Связь')
 
     def init_field(self, field):
         self.fields.append(field)

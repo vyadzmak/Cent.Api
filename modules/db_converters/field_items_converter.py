@@ -10,6 +10,28 @@ import models.app_models.schema_models.schema_model as s_model
 import datetime
 from sqlalchemy import and_
 import copy
+def get_to_schema_link_items(id,f_name):
+    try:
+        schema = session.query(Schemas).filter(Schemas.id == id).first()
+
+        j = json.loads(schema.data)
+        fields = j["fields"]
+        index_name =""
+        val_name =""
+
+        cat_id =-1
+        for f in fields:
+
+            if (f["name"]==f_name ):
+                var = f["var"]["schema_id"]
+
+                cat_id=var
+
+        return get_to_schema_catalog_items(cat_id)
+    except Exception as e:
+        return None
+
+
 def get_to_schema_catalog_items(id):
     schema = session.query(Schemas).filter(Schemas.id == id).first()
 

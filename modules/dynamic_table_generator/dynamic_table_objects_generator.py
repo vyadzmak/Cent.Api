@@ -2,6 +2,7 @@ import models.app_models.dynamic_object_models.dynamic_object_model as dynamic_o
 import models.app_models.dynamic_table_models.dynamic_table_model as dynamic_table
 import json
 import modules.json_modules.json_encoder as encoder
+import modules.db_converters.field_items_converter as f_i_converter
 def get_to_schema(id):
     from models.db_models.models import Schemas
     from db.db import session
@@ -48,7 +49,20 @@ def generate_dynamic_table_by_objects(objects):
             d_obj = dynamic_object.DynamicObject()
             setattr(d_obj, "g_id", ob.id)
             for field in fields:
+                field_type = field["field_type"]
+                if (field_type == 9 ):
+                    items = f_i_converter.get_to_schema_link_items(ob.schema_id,field["name"])
+                    if (items != None and len(items) > 0):
+                        field["items"] = encoder.encode(items)
+                        o_v = field["output_value"]
+                        for i in items:
+                            if (str(i.id)==str(o_v)):
+                                field["output_value"] =i.name
+                                break
+
+
                 if (check_field(field,"is_visible")):
+
                     setattr(d_obj, field["name"], field["output_value"])
 
             dt.init_item(d_obj)

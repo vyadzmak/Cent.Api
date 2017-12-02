@@ -57,7 +57,8 @@ class SchemaLinkListResource(Resource):
 class SchemaClientListResource(Resource):
     @marshal_with(schema_fields)
     def get(self, clientId):
-        schemas = session.query(Schemas).filter(Schemas.client_id == clientId
+        schemas = session.query(Schemas).filter(and_  (Schemas.client_id == clientId,
+                                                       Schemas.is_show==True)
                                                 ).all()
         if not schemas:
             abort(404, message="Schemas not found")
@@ -105,6 +106,7 @@ class SchemaResource(Resource):
         schema.schema_type_id = json_data["schema_type_id"],
         schema.client_id = json_data["client_id"],
         schema.user_id = json_data["user_id"]
+        schema.is_show = json_data["is_show"]
         schema.update_date = datetime.datetime.now()
         schema.data = s_d_converter.convert_schema_object(json_data)
         session.add(schema)
@@ -132,7 +134,7 @@ class SchemaListResource(Resource):
                 schema_type_id=json_data["schema_type_id"],
                 client_id=json_data["client_id"],
                 user_id=json_data["user_id"],
-
+                is_show=json_data["is_show"]
             )
             session.add(schema)
             session.commit()

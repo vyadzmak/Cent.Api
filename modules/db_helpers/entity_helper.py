@@ -4,6 +4,8 @@ import models.app_models.dynamic_object_models.dynamic_object_model as d_object
 def get_entity_fields_by_id(id):
     from models.db_models.models import Objects
     object = session.query(Objects).filter(Objects.id == id).first()
+    #
+
     return object.data
     pass
 

@@ -122,10 +122,10 @@ class Schemas(Base):
     user_id = Column('user_id', ForeignKey('users.id'))
     creation_date = Column('creation_date', DateTime)
     update_date = Column('update_date', DateTime)
-
+    is_show = Column('is_show',Boolean)
     #
     #user = relationship("Users", backref="client")
-    def __init__(self, name, title, group_title, description, schema_type_id, client_id, user_id):
+    def __init__(self, name, title, group_title, description, schema_type_id, client_id, user_id,is_show):
         self.name=name
         self.title = title
         self.group_title=group_title
@@ -134,7 +134,7 @@ class Schemas(Base):
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
-
+        self.is_show = is_show
         obj =schema_model.Schema(name, title, group_title, schema_type_id)
         self.creation_date = datetime.datetime.now()
         self.update_date =datetime.datetime.now()

@@ -26,7 +26,8 @@ schema_fields = {
     'user_id': fields.Integer,
     'creation_date': fields.DateTime,
     'update_date': fields.DateTime,
-    'data': fields.String
+    'data': fields.String,
+    'is_show': fields.Boolean
 }
 
 

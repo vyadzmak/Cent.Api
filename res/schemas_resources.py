@@ -65,7 +65,8 @@ class SchemaClientListResource(Resource):
                                                      Schemas.is_show == True)
                                                 ).all()
         if not schemas:
-            abort(400, message="Schemas not found")
+            #abort(204, message="Schemas not found")
+            return {}, 204
         return schemas
 
 

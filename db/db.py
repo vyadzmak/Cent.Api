@@ -9,3 +9,8 @@ Session = sessionmaker(autocommit=False,
                        bind=create_engine(DB_URI))
 session = scoped_session(Session)
 
+def init_session():
+    Session = sessionmaker(autocommit=False,
+                           autoflush=False,
+                           bind=create_engine(DB_URI))
+    session = scoped_session(Session)

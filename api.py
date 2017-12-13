@@ -13,6 +13,10 @@ app.config['BUNDLE_ERRORS'] = True
 json_encoder = AlchemyEncoder
 app.json_encoder =json_encoder
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
+app.config['PROPAGATE_EXCEPTIONS'] = True
+@app.errorhandler(500)
+def internal_error(error):
+    return "500 error"
 api = Api(app)
 #import resources
 from res.user_roles_resources import *
@@ -29,6 +33,7 @@ from res.entity_resources import *
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
 api.add_resource(UserRoleResource, '/userRole/<int:id>', endpoint='user-role')
+api.add_resource(AdminUserRoleListResource, '/adminUserRoles', endpoint='admin-user-role')
 
 #client types
 api.add_resource(ClientTypeListResource, '/clientTypes', endpoint='client-types')
@@ -65,8 +70,12 @@ api.add_resource(SchemaCatalogsListResource, '/schemaCatalogs/<int:clientId>', e
 #get to all schema links
 api.add_resource(SchemaLinkListResource, '/schemaLinks/<int:clientId>', endpoint='schemaLinks')
 
-#get to all schema by Client
+#get to all main schemas by Client
 api.add_resource(SchemaClientListResource, '/schemaClients/<int:clientId>', endpoint='schemaClients')
+
+#get to full schemas by Client
+api.add_resource(FullSchemaClientListResource, '/fullSchemaClients/<int:clientId>', endpoint='fullSchemaClients')
+
 
 #objects
 #get to all objects
@@ -83,6 +92,8 @@ api.add_resource(ObjectEntitySchemaListResource, '/entityObjects', endpoint='ent
 
 
 api.add_resource(EntityResource, '/entityDetails/<int:id>', endpoint='entityDetails')
+
+api.add_resource(TestResource, '/test', endpoint='tests')
 
 #start application
 if __name__ == '__main__':

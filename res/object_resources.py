@@ -41,19 +41,22 @@ class ObjectSchemaListResource(Resource):
 class ObjectEntitySchemaListResource(Resource):
     #@marshal_with(object_fields)
     def post(self):
+        try:
+            json_data = request.get_json(force=True)
+            parent_id = json_data["parent_id"]
+            schema_id = json_data["schema_id"]
+            objects =  session.query(Objects).filter(and_(
+                Objects.schema_id == schema_id,
+                Objects.parent_id ==parent_id)
+            ).all()
 
-        json_data = request.get_json(force=True)
-        parent_id = json_data["parent_id"]
-        schema_id = json_data["schema_id"]
-        objects =  session.query(Objects).filter(and_(
-            Objects.schema_id == schema_id,
-            Objects.parent_id ==parent_id)
-        ).all()
 
+            result = dt_generator.generate_dynamic_table_by_objects(objects)
 
-        result = dt_generator.generate_dynamic_table_by_objects(objects)
-
-        return result
+            return result
+        except:
+            session.rollback()
+            abort(400, message="Error while adding object")
 
 class ObjectResource(Resource):
     @marshal_with(object_fields)
@@ -64,29 +67,37 @@ class ObjectResource(Resource):
         return object
 
     def delete(self, id):
-        object = session.query(Objects).filter(Objects.id == id).first()
-        if not object:
-            abort(404, message="Object {} doesn't exist".format(id))
-        session.delete(object)
-        session.commit()
-        return {}, 204
+        try:
+            object = session.query(Objects).filter(Objects.id == id).first()
+            if not object:
+                abort(404, message="Object {} doesn't exist".format(id))
+            session.delete(object)
+            session.commit()
+            return {}, 204
+        except:
+            session.rollback()
+            abort(400, message="Error while remove object")
 
     @marshal_with(object_fields)
     def put(self, id):
-        json_data = request.get_json(force=True)
-        object = session.query(Objects).filter(Objects.id == id).first()
-        object.schema_id = json_data["schema_id"]
-        object.client_id = json_data["client_id"]
-        object.user_id = json_data["user_id"]
-        object.parent_id = json_data["parent_id"]
-        fields = json_data["fields"]
-        object.update_date = datetime.datetime.now()
-        obj = object_model.Object(parent_id=object.parent_id, fields=fields)
-        object.data = encoder.encode(obj)
+        try:
+            json_data = request.get_json(force=True)
+            object = session.query(Objects).filter(Objects.id == id).first()
+            object.schema_id = json_data["schema_id"]
+            object.client_id = json_data["client_id"]
+            object.user_id = json_data["user_id"]
+            object.parent_id = json_data["parent_id"]
+            fields = json_data["fields"]
+            object.update_date = datetime.datetime.now()
+            obj = object_model.Object(parent_id=object.parent_id, fields=fields)
+            object.data = encoder.encode(obj)
 
-        session.add(object)
-        session.commit()
-        return object, 201
+            session.add(object)
+            session.commit()
+            return object, 201
+        except:
+            session.rollback()
+            abort(400, message="Error while update object")
 
 
 class ObjectListResource(Resource):
@@ -110,4 +121,5 @@ class ObjectListResource(Resource):
             session.commit()
             return object, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record Schema")

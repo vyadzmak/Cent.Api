@@ -25,4 +25,5 @@ class LogListResource(Resource):
             session.commit()
             return log, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record Log")

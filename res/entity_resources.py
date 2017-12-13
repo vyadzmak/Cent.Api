@@ -24,49 +24,38 @@ class EntityResource(Resource):
         return encoder.encode(result)
 
     def delete(self, id):
-        object = session.query(Objects).filter(Objects.id == id).first()
-        if not object:
-            abort(404, message="Object {} doesn't exist".format(id))
-        session.delete(object)
-        session.commit()
-        return {}, 204
+        try:
+            object = session.query(Objects).filter(Objects.id == id).first()
+            if not object:
+                abort(404, message="Object {} doesn't exist".format(id))
+            session.delete(object)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while remove Entity")
+
 
     def put(self, id):
-        json_data = request.get_json(force=True)
-        object = session.query(Objects).filter(Objects.id == id).first()
-        object.schema_id = json_data["schema_id"]
-        object.client_id = json_data["client_id"]
-        object.user_id = json_data["user_id"]
-        object.parent_id = json_data["parent_id"]
-        fields = json_data["fields"]
-        object.update_date = datetime.datetime.now()
-        obj = object_model.Object(parent_id=object.parent_id, fields=fields)
-        object.data = encoder.encode(obj)
+        try:
 
-        session.add(object)
-        session.commit()
-        return object, 201
+            json_data = request.get_json(force=True)
+            object = session.query(Objects).filter(Objects.id == id).first()
+            object.schema_id = json_data["schema_id"]
+            object.client_id = json_data["client_id"]
+            object.user_id = json_data["user_id"]
+            object.parent_id = json_data["parent_id"]
+            fields = json_data["fields"]
+            object.update_date = datetime.datetime.now()
+            obj = object_model.Object(parent_id=object.parent_id, fields=fields)
+            object.data = encoder.encode(obj)
+
+            session.add(object)
+            session.commit()
+            return object, 201
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while update Entity")
 
 
-# class ObjectListResource(Resource):
-#     @marshal_with(object_fields)
-#     def get(self):
-#         objects = session.query(Objects).all()
-#         return objects
-#
-#     @marshal_with(object_fields)
-#     def post(self):
-#         try:
-#             json_data = request.get_json(force=True)
-#             object = Objects(
-#                 schema_id=json_data["schema_id"],
-#                 client_id=json_data["client_id"],
-#                 user_id=json_data["user_id"],
-#                 parent_id=json_data["parent_id"],
-#                 fields = json_data["fields"]
-#             )
-#             session.add(object)
-#             session.commit()
-#             return object, 201
-#         except Exception as e:
-#             abort(400, message="Error while adding record Schema")
+

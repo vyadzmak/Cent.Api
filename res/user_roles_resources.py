@@ -8,6 +8,12 @@ user_role_fields = {
     'name': fields.String
 }
 
+class AdminUserRoleListResource(Resource):
+    @marshal_with(user_role_fields)
+    def get(self):
+        user_roles = session.query(UserRoles).filter(UserRoles.id!=1).all()
+        return user_roles
+
 
 class UserRoleResource(Resource):
     @marshal_with(user_role_fields)
@@ -18,21 +24,29 @@ class UserRoleResource(Resource):
         return user_role
 
     def delete(self, id):
-        user_role = session.query(UserRoles).filter(UserRoles.id == id).first()
-        if not user_role:
-            abort(404, message="User role {} doesn't exist".format(id))
-        session.delete(user_role)
-        session.commit()
-        return {}, 204
+        try:
+            user_role = session.query(UserRoles).filter(UserRoles.id == id).first()
+            if not user_role:
+                abort(404, message="User role {} doesn't exist".format(id))
+            session.delete(user_role)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while remove user role")
 
     @marshal_with(user_role_fields)
     def put(self, id):
-        json_data = request.get_json(force=True)
-        user_role = session.query(UserRoles).filter(UserRoles.id == id).first()
-        user_role.task =json_data['name']
-        session.add(user_role)
-        session.commit()
-        return user_role, 201
+        try:
+            json_data = request.get_json(force=True)
+            user_role = session.query(UserRoles).filter(UserRoles.id == id).first()
+            user_role.task =json_data['name']
+            session.add(user_role)
+            session.commit()
+            return user_role, 201
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while update user role")
 
 class UserRoleListResource(Resource):
     @marshal_with(user_role_fields)
@@ -49,4 +63,5 @@ class UserRoleListResource(Resource):
             session.commit()
             return user_role, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error in adding User Role")

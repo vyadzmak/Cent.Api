@@ -59,7 +59,7 @@ class UserAuthResource(Resource):
             session.commit()
             return user_login
         except Exception as e:
-
+            session.rollback()
 
             abort(400, message="Error Auth")
 
@@ -75,12 +75,16 @@ class UserLoginResource(Resource):
         return user_login
 
     def delete(self, id):
-        user_login = session.query(UserLogins).filter(UserLogins.id == id).first()
-        if not user_login:
-            abort(404, message="User Login {} doesn't exist".format(id))
-        session.delete(user_login)
-        session.commit()
-        return {}, 204
+        try:
+            user_login = session.query(UserLogins).filter(UserLogins.id == id).first()
+            if not user_login:
+                abort(404, message="User Login {} doesn't exist".format(id))
+            session.delete(user_login)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error remove user login")
 
     @marshal_with(user_login_fields)
     def put(self, id):
@@ -96,7 +100,8 @@ class UserLoginResource(Resource):
             session.commit()
             return user_login, 201
         except Exception as e:
-            abort(500, message="Internal server error")
+            session.rollback()
+            abort(400, message="Internal server error")
 
 
 class UserLoginListResource(Resource):
@@ -116,4 +121,5 @@ class UserLoginListResource(Resource):
             session.commit()
             return user_login, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record User Login")

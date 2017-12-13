@@ -19,22 +19,29 @@ class ClientTypeResource(Resource):
         return client_type
 
     def delete(self, id):
-        client_type = session.query(ClientTypes).filter(ClientTypes.id == id).first()
-        if not client_type:
-            abort(404, message="Client type {} doesn't exist".format(id))
-        session.delete(client_type)
-        session.commit()
-        return {}, 204
+        try:
+            client_type = session.query(ClientTypes).filter(ClientTypes.id == id).first()
+            if not client_type:
+                abort(404, message="Client type {} doesn't exist".format(id))
+            session.delete(client_type)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while remove Client Type")
 
     @marshal_with(client_type_fields)
     def put(self, id):
-
-        json_data = request.get_json(force=True)
-        client_type = session.query(ClientTypes).filter(ClientTypes.id == id).first()
-        client_type.name = json_data['name']
-        session.add(client_type)
-        session.commit()
-        return client_type, 201
+        try:
+            json_data = request.get_json(force=True)
+            client_type = session.query(ClientTypes).filter(ClientTypes.id == id).first()
+            client_type.name = json_data['name']
+            session.add(client_type)
+            session.commit()
+            return client_type, 201
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while update Client Type")
 
 class ClientTypeListResource(Resource):
     @marshal_with(client_type_fields)
@@ -51,4 +58,5 @@ class ClientTypeListResource(Resource):
             session.commit()
             return client_type, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record Client Type")

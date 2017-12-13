@@ -19,9 +19,6 @@ client_fields = {
 }
 
 
-
-
-
 class ClientResource(Resource):
     @marshal_with(client_fields)
     def get(self, id):
@@ -31,25 +28,32 @@ class ClientResource(Resource):
         return client
 
     def delete(self, id):
-        client = session.query(Clients).filter(Clients.id == id).first()
-        if not client:
-            abort(404, message="Client type {} doesn't exist".format(id))
-        session.delete(client)
-        session.commit()
-        return {}, 204
+        try:
+            client = session.query(Clients).filter(Clients.id == id).first()
+            if not client:
+                abort(404, message="Client type {} doesn't exist".format(id))
+            session.delete(client)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while remove Client")
 
     @marshal_with(client_fields)
     def put(self, id):
-
-        json_data = request.get_json(force=True)
-        client = session.query(Clients).filter(Clients.id == id).first()
-        client.name = json_data['name']
-        client.registration_number = json_data["registration_number"]
-        client.lock_state = json_data["lock_state"]
-        client.client_type_id = json_data["client_type_id"]
-        session.add(client)
-        session.commit()
-        return client, 201
+        try:
+            json_data = request.get_json(force=True)
+            client = session.query(Clients).filter(Clients.id == id).first()
+            client.name = json_data['name']
+            client.registration_number = json_data["registration_number"]
+            client.lock_state = json_data["lock_state"]
+            client.client_type_id = json_data["client_type_id"]
+            session.add(client)
+            session.commit()
+            return client, 201
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error while update Client")
 
 
 class ClientListResource(Resource):
@@ -68,4 +72,5 @@ class ClientListResource(Resource):
             session.commit()
             return client, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record Client")

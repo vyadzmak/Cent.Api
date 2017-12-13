@@ -6,9 +6,12 @@ import modules.db_converters.schema_data_converter as s_d_converter
 import models.app_models.schema_models.schema_model as s_model
 import datetime
 from sqlalchemy import and_
+
+import db.db
 import copy
 
 import modules.db_converters.field_items_converter as items_converter
+
 schema_type_fields = {
     'id': fields.Integer(),
     'name': fields.String(),
@@ -39,7 +42,7 @@ class SchemaCatalogsListResource(Resource):
                  Schemas.client_id == clientId)
         ).all()
         if not schemas:
-            abort(404, message="Schemas not found")
+            abort(400, message="Schemas not found")
         return schemas
 
 
@@ -51,18 +54,28 @@ class SchemaLinkListResource(Resource):
                                                 (Schemas.client_id == clientId)
                                                 ).all()
         if not schemas:
-            abort(404, message="Schemas not found")
+            abort(400, message="Schemas not found")
         return schemas
 
 
 class SchemaClientListResource(Resource):
     @marshal_with(schema_fields)
     def get(self, clientId):
-        schemas = session.query(Schemas).filter(and_  (Schemas.client_id == clientId,
-                                                       Schemas.is_show==True)
+        schemas = session.query(Schemas).filter(and_(Schemas.client_id == clientId,
+                                                     Schemas.is_show == True)
                                                 ).all()
         if not schemas:
-            abort(404, message="Schemas not found")
+            abort(400, message="Schemas not found")
+        return schemas
+
+
+class FullSchemaClientListResource(Resource):
+    @marshal_with(schema_fields)
+    def get(self, clientId):
+        schemas = session.query(Schemas).filter(Schemas.client_id == clientId,
+                                               ).all()
+        if not schemas:
+            return {}, 204
         return schemas
 
 
@@ -85,34 +98,42 @@ class SchemaResource(Resource):
 
         result_schema.data = items_converter.get_to_data_field_items(result_schema.data)
 
-
         return result_schema
 
     def delete(self, id):
-        schema = session.query(Schemas).filter(Schemas.id == id).first()
-        if not schema:
-            abort(404, message="Client type {} doesn't exist".format(id))
-        session.delete(schema)
-        session.commit()
-        return {}, 204
+        try:
+            schema = session.query(Schemas).filter(Schemas.id == id).first()
+            if not schema:
+                abort(404, message="Client type {} doesn't exist".format(id))
+            session.delete(schema)
+            session.commit()
+            return {}, 204
+        except Exception as e:
+            # db.db.init_session()
+            session.rollback()
+            abort(400, message="Error in remove schema".format(id))
 
     @marshal_with(schema_fields)
     def put(self, id):
-        json_data = request.get_json(force=True)
-        schema = session.query(Schemas).filter(Schemas.id == id).first()
-        schema.name = json_data['name']
-        schema.title = json_data["title"],
-        schema.group_title = json_data["group_title"],
-        schema.description = json_data["description"],
-        schema.schema_type_id = json_data["schema_type_id"],
-        schema.client_id = json_data["client_id"],
-        schema.user_id = json_data["user_id"]
-        schema.is_show = json_data["is_show"]
-        schema.update_date = datetime.datetime.now()
-        schema.data = s_d_converter.convert_schema_object(json_data)
-        session.add(schema)
-        session.commit()
-        return schema, 201
+        try:
+            json_data = request.get_json(force=True)
+            schema = session.query(Schemas).filter(Schemas.id == id).first()
+            schema.name = json_data['name']
+            schema.title = json_data["title"],
+            schema.group_title = json_data["group_title"],
+            schema.description = json_data["description"],
+            schema.schema_type_id = json_data["schema_type_id"],
+            schema.client_id = json_data["client_id"],
+            schema.user_id = json_data["user_id"]
+            schema.is_show = json_data["is_show"]
+            schema.update_date = datetime.datetime.now()
+            schema.data = s_d_converter.convert_schema_object(json_data)
+            session.add(schema)
+            session.commit()
+            return schema, 201
+        except Exception as e:
+            session.rollback()
+            abort(400, message="Error update schema".format(id))
 
 
 class SchemaListResource(Resource):
@@ -141,4 +162,5 @@ class SchemaListResource(Resource):
             session.commit()
             return schema, 201
         except Exception as e:
+            session.rollback()
             abort(400, message="Error while adding record Schema")

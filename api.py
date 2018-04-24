@@ -111,7 +111,7 @@ api.add_resource(ActionLogTypeListResource, '/actionLogTypes', endpoint='actionL
 api.add_resource(ActionLogTypeResource, '/actionLogTypes/<int:id>', endpoint='actionLogType')
 
 #action log
-api.add_resource(ActionLogListResource, '/actionLog', endpoint='actionLog')
+api.add_resource(ActionLogListResource, '/actionLog', endpoint='actionLogs')
 api.add_resource(ActionLogResource, '/actionLog/<int:id>', endpoint='actionLog')
 
 

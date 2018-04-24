@@ -174,12 +174,14 @@ class ActionLog(Base):
     action_date = Column('action_date', DateTime)
     user_id = Column('user_id', ForeignKey('users.id'))
     message = Column('message', String(750))
+    action_log_type = relationship('ActionLogTypes', backref='action_log_type')
+    user_data = relationship('Users', backref="action_log_user_data")
 
     def __init__(self, action_type_id, user_id, message=''):
         self.action_type_id = action_type_id
         self.action_date = datetime.datetime.now()
         self.message = message
-
+        self.user_id = user_id
         # action_types
 
 

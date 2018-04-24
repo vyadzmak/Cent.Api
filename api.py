@@ -2,10 +2,13 @@ from flask import Flask
 from flask_restful import Resource, Api
 from models.app_models.json_encoder_models.json_encoder import AlchemyEncoder
 from flask_cors import CORS
-
+from flask_basicauth import BasicAuth
 #init application
 app = Flask(__name__)
-
+app.config['BASIC_AUTH_USERNAME'] = 'cent_user'
+app.config['BASIC_AUTH_PASSWORD'] = 'vPe0N9zb7bGK1Ng5'
+app.config['BASIC_AUTH_FORCE'] = True
+basic_auth = BasicAuth(app)
 #cors = CORS(app, resources={r"/login/*": {"origins": "*"}})
 CORS(app)
 
@@ -14,6 +17,9 @@ json_encoder = AlchemyEncoder
 app.json_encoder =json_encoder
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+
+
 @app.errorhandler(500)
 def internal_error(error):
     return "500 error"
@@ -29,6 +35,8 @@ from res.upload_resources import *
 from res.schemas_resources import *
 from res.object_resources import *
 from res.entity_resources import *
+from res.action_log_types_resources import *
+from res.action_log_resources import *
 #add resources
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
@@ -45,6 +53,8 @@ api.add_resource(ClientResource, '/client/<int:id>', endpoint='client')
 
 #users
 api.add_resource(ClientUsersListResource, '/clientUsers/<int:id>', endpoint='client-users')
+
+
 api.add_resource(UserListResource, '/users', endpoint='users')
 api.add_resource(UserResource, '/user/<int:id>', endpoint='user')
 
@@ -94,6 +104,16 @@ api.add_resource(ObjectEntitySchemaListResource, '/entityObjects', endpoint='ent
 api.add_resource(EntityResource, '/entityDetails/<int:id>', endpoint='entityDetails')
 
 api.add_resource(TestResource, '/test', endpoint='tests')
+
+
+#action log type
+api.add_resource(ActionLogTypeListResource, '/actionLogTypes', endpoint='actionLogTypes')
+api.add_resource(ActionLogTypeResource, '/actionLogTypes/<int:id>', endpoint='actionLogType')
+
+#action log
+api.add_resource(ActionLogListResource, '/actionLog', endpoint='actionLog')
+api.add_resource(ActionLogResource, '/actionLog/<int:id>', endpoint='actionLog')
+
 
 #start application
 if __name__ == '__main__':

@@ -11,14 +11,15 @@ from sqlalchemy import Integer, ForeignKey, String, Column, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-import  models.app_models.schema_models.schema_model as schema_model
-import  models.app_models.object_models.object_model as object_model
+import models.app_models.schema_models.schema_model as schema_model
+import models.app_models.object_models.object_model as object_model
 import modules.json_modules.json_encoder as encoder
 import datetime
 
 Base = declarative_base()
 
-# user table
+
+# log table
 class Log(Base):
     __tablename__ = 'log'
     id = Column('id', Integer, primary_key=True)
@@ -30,7 +31,7 @@ class Log(Base):
         self.message = message
 
 
-# user table
+# users table
 class Users(Base):
     __tablename__ = 'users'
     id = Column('id', Integer, primary_key=True)
@@ -72,15 +73,16 @@ class UserLogins(Base):
     user_id = Column('user_id', ForeignKey('users.id'))
     user_login_data = relationship("Users", backref="login_data")
 
-    def __init__(self,login,password,user_id):
+    def __init__(self, login, password, user_id):
         self.login = login
         self.password = password
         self.user_id = user_id
         self.registration_date = datetime.datetime.now()
+
     pass
 
 
-# client type
+# client types
 class ClientTypes(Base):
     __tablename__ = 'client_types'
     id = Column(Integer, primary_key=True)
@@ -98,6 +100,7 @@ class Clients(Base):
     lock_state = Column('lock_state', Boolean)
     client_type_id = Column('client_type_id', ForeignKey('client_types.id'))
     user_client = relationship("Users", backref="client")
+
     def __init__(self, name, registration_number, lock_state, client_type_id):
         self.name = name
         self.registration_number = registration_number
@@ -106,9 +109,7 @@ class Clients(Base):
         self.registration_date = datetime.datetime.now()
 
 
-
-
-#schemas
+# schemas
 class Schemas(Base):
     __tablename__ = 'schemas'
     id = Column('id', Integer, primary_key=True)
@@ -122,24 +123,25 @@ class Schemas(Base):
     user_id = Column('user_id', ForeignKey('users.id'))
     creation_date = Column('creation_date', DateTime)
     update_date = Column('update_date', DateTime)
-    is_show = Column('is_show',Boolean)
-    #
-    #user = relationship("Users", backref="client")
-    def __init__(self, name, title, group_title, description, schema_type_id, client_id, user_id,is_show):
-        self.name=name
+    is_show = Column('is_show', Boolean)
+
+    def __init__(self, name, title, group_title, description, schema_type_id, client_id, user_id, is_show):
+        self.name = name
         self.title = title
-        self.group_title=group_title
-        self.description=description
-        self.schema_type_id=schema_type_id
+        self.group_title = group_title
+        self.description = description
+        self.schema_type_id = schema_type_id
         self.client_id = client_id
         self.user_id = user_id
         self.creation_date = datetime.datetime.now()
         self.is_show = is_show
-        obj =schema_model.Schema(name, title, group_title, schema_type_id)
+        obj = schema_model.Schema(name, title, group_title, schema_type_id)
         self.creation_date = datetime.datetime.now()
-        self.update_date =datetime.datetime.now()
-        self.data =encoder.encode(obj)
-#objects
+        self.update_date = datetime.datetime.now()
+        self.data = encoder.encode(obj)
+
+
+# objects
 class Objects(Base):
     __tablename__ = 'objects'
     id = Column('id', Integer, primary_key=True)
@@ -150,18 +152,54 @@ class Objects(Base):
     creation_date = Column('creation_date', DateTime)
     update_date = Column('update_date', DateTime)
     parent_id = Column('parent_id', Integer)
-    #
-    #user = relationship("Schemas", backref="schema")
-    def __init__(self,schema_id,client_id, user_id,parent_id, fields):
 
+    def __init__(self, schema_id, client_id, user_id, parent_id, fields):
         self.client_id = client_id
         self.user_id = user_id
-        self.schema_id =schema_id
+        self.schema_id = schema_id
         self.creation_date = datetime.datetime.now()
         self.update_date = datetime.datetime.now()
         self.parent_id = parent_id
-        obj = object_model.Object(parent_id=parent_id,fields=fields)
+        obj = object_model.Object(parent_id=parent_id, fields=fields)
         self.data = encoder.encode(obj)
+
+        # NEW MODELS
+        # action_log
+
+
+class ActionLog(Base):
+    __tablename__ = 'action_log'
+    id = Column(Integer, primary_key=True)
+    action_type_id = Column('action_type_id', ForeignKey('action_types.id'))
+    action_date = Column('action_date', DateTime)
+    user_id = Column('user_id', ForeignKey('users.id'))
+    message = Column('message', String(750))
+
+    def __init__(self, action_type_id, user_id, message=''):
+        self.action_type_id = action_type_id
+        self.action_date = datetime.datetime.now()
+        self.message = message
+
+        # action_types
+
+
+class ActionLogTypes(Base):
+    __tablename__ = 'action_types'
+    id = Column(Integer, primary_key=True)
+
+    message = Column('message', String(750))
+    code = Column('code', Integer)
+
+    def __init__(self, message, code=-1):
+        self.message = message
+        self.code = code
+
+        # attachment_types
+        # attachments
+        # client_info
+
+
+# main section
 if __name__ == "__main__":
     from sqlalchemy import create_engine
     from models.app_models.setting_models.setting_model import DB_URI

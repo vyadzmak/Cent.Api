@@ -2,7 +2,19 @@ from models.db_models.models import Clients
 from db.db import session
 from flask import Flask, jsonify, request
 from flask_restful import Resource, fields, marshal_with, abort, reqparse
-
+client_info_fields = {
+    'id': fields.Integer,
+    'client_id': fields.Integer,
+    'logo_attachment_id': fields.Integer,
+    'address': fields.String,
+    'main_phone_number': fields.String,
+    'additional_phone_number': fields.String,
+    'site_url': fields.String,
+    'main_info': fields.String,
+    'additional_info': fields.String,
+    'email': fields.String,
+    'location_coordinates': fields.List(fields.Float)
+}
 client_type_fields = {
     'id': fields.Integer(attribute="id"),
     'name': fields.String(attribute="name")
@@ -15,7 +27,8 @@ client_fields = {
     'registration_number': fields.String,
     'lock_state': fields.Boolean,
     'client_type_id': fields.Integer,
-    'client_type': fields.Nested(client_type_fields)
+    'client_type': fields.Nested(client_type_fields),
+    'client_info':fields.Nested(client_info_fields)
 }
 
 

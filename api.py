@@ -37,6 +37,9 @@ from res.object_resources import *
 from res.entity_resources import *
 from res.action_log_types_resources import *
 from res.action_log_resources import *
+from res.attachment_types_resources import *
+from res.attachments_resources import *
+from res.client_info_resources import *
 #add resources
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
@@ -45,11 +48,11 @@ api.add_resource(AdminUserRoleListResource, '/adminUserRoles', endpoint='admin-u
 
 #client types
 api.add_resource(ClientTypeListResource, '/clientTypes', endpoint='client-types')
-api.add_resource(ClientTypeResource, '/clientType/<int:id>', endpoint='client-type')
+api.add_resource(ClientTypeResource, '/clientTypes/<int:id>', endpoint='client-type')
 
 #clients
 api.add_resource(ClientListResource, '/clients', endpoint='clients')
-api.add_resource(ClientResource, '/client/<int:id>', endpoint='client')
+api.add_resource(ClientResource, '/clients/<int:id>', endpoint='client')
 
 #users
 api.add_resource(ClientUsersListResource, '/clientUsers/<int:id>', endpoint='client-users')
@@ -114,7 +117,17 @@ api.add_resource(ActionLogTypeResource, '/actionLogTypes/<int:id>', endpoint='ac
 api.add_resource(ActionLogListResource, '/actionLog', endpoint='actionLogs')
 api.add_resource(ActionLogResource, '/actionLog/<int:id>', endpoint='actionLog')
 
+#attachment log type
+api.add_resource(AttachmentTypeListResource, '/attachmentTypes', endpoint='attachmentTypes')
+api.add_resource(AttachmentTypeResource, '/attachmentTypes/<int:id>', endpoint='attachmentType')
 
+#attachments
+api.add_resource(AttachmentsListResource, '/attachments', endpoint='attachments')
+api.add_resource(AttachmentsResource, '/attachments/<int:id>', endpoint='attachment')
+
+#client info
+api.add_resource(ClientInfoListResource, '/clientInfo', endpoint='clientInfos')
+api.add_resource(ClientInfoResource, '/clientInfo/<int:id>', endpoint='clientInfo')
 #start application
 if __name__ == '__main__':
     #u_s.get_user_roles()

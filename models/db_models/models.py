@@ -282,25 +282,28 @@ class GroupObjectRights(Base):
     data = Column('data', JSON)
     updated_date = Column('updated_date', DateTime)
     user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
+    object_id = Column('object_id', ForeignKey('objects.id'))
 
-    def __init__(self, group_id, user_creator_id, data=None):
+    def __init__(self, group_id, user_creator_id, object_id, data=None):
         self.group_id = group_id
         self.user_creator_id = user_creator_id
         self.data = data
         self.updated_date = datetime.datetime.now()
+        self.object_id = object_id
 
 
 # user_groups
 class UserGroups(Base):
-    __tablename__ = 'group_object_rights'
+    __tablename__ = 'user_groups'
     id = Column(Integer, primary_key=True)
     created_date = Column('created_date', DateTime)
     user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
     lock_state = Column('lock_state', Boolean)
     group_name = Column('group_name', String(64))
     group_members = Column(postgresql.ARRAY(Integer))
-
+    user_group_user_data = relationship('Users', backref="user_group_user_data")
     def __init__(self, user_creator_id, group_name):
+        self.user_creator_id = user_creator_id
         self.created_date = datetime.datetime.now()
         self.lock_state = False
         self.group_name = group_name
@@ -313,11 +316,33 @@ class UserGroupSettings(Base):
     id = Column(Integer, primary_key=True)
     group_id = Column('group_id', ForeignKey('user_groups.id'))
     data = Column('data', JSON)
-
+    user_group_data =  relationship('UserGroups', backref="user_group_data")
     def __init__(self, group_id, data=None):
         self.group_id = group_id
         self.data = data
 
+# object settings
+class ObjectSettings(Base):
+        __tablename__ = 'object_settings'
+        id = Column(Integer, primary_key=True)
+        object_id = Column('object_id', ForeignKey('objects.id'))
+        data = Column('data', JSON)
+
+        def __init__(self, object_id, data=None):
+            self.object_id = object_id
+            self.data = data
+
+# object settings
+class ObjectViews(Base):
+            __tablename__ = 'object_views'
+            id = Column(Integer, primary_key=True)
+            object_id = Column('object_id', ForeignKey('objects.id'))
+            data = Column('data', JSON)
+            user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
+            def __init__(self, object_id,user_creator_id, data=None):
+                self.object_id = object_id
+                self.user_creator_id = user_creator_id
+                self.data = data
 
 # main section
 if __name__ == "__main__":

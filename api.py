@@ -40,6 +40,12 @@ from res.action_log_resources import *
 from res.attachment_types_resources import *
 from res.attachments_resources import *
 from res.client_info_resources import *
+from res.user_groups_resources import *
+from res.user_group_settings_resources import *
+from res.group_object_rights_resources import *
+from res.object_settings_resources import *
+from res.object_views_resources import *
+
 #add resources
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
@@ -67,7 +73,7 @@ api.add_resource(UserLoginResource, '/userLogin/<int:id>', endpoint='userLogin')
 api.add_resource(UserAuthResource, '/login', endpoint='login')
 
 #log
-api.add_resource(LogListResource, '/log', endpoint='log')
+api.add_resource(LogListResource, '/logs', endpoint='logs')
 
 #upload files
 api.add_resource(UploadFile, '/upload', endpoint='upload')
@@ -95,7 +101,7 @@ api.add_resource(FullSchemaClientListResource, '/fullSchemaClients/<int:clientId
 api.add_resource(ObjectListResource, '/objects', endpoint='objects')
 
 #get to object
-api.add_resource(ObjectResource, '/object/<int:id>', endpoint='object')
+api.add_resource(ObjectResource, '/objects/<int:id>', endpoint='object')
 
 #get to schema objects
 api.add_resource(ObjectSchemaListResource, '/schemaObjects/<int:schemaId>', endpoint='schemaObjects')
@@ -128,6 +134,29 @@ api.add_resource(AttachmentsResource, '/attachments/<int:id>', endpoint='attachm
 #client info
 api.add_resource(ClientInfoListResource, '/clientInfo', endpoint='clientInfos')
 api.add_resource(ClientInfoResource, '/clientInfo/<int:id>', endpoint='clientInfo')
+
+
+#user groups
+api.add_resource(UserGroupsListResource, '/userGroups', endpoint='userGroups')
+api.add_resource(UserGroupsResource, '/userGroups/<int:id>', endpoint='userGroup')
+
+#user group settings
+api.add_resource(UserGroupSettingsListResource, '/userGroupSettings', endpoint='userGroupSettings')
+api.add_resource(UserGroupSettingsResource, '/userGroupSettings/<int:id>', endpoint='userGroupSetting')
+
+
+#group object rights
+api.add_resource(GroupObjectRightsListResource, '/groupObjectRights', endpoint='groupObjectRights')
+api.add_resource(GroupObjectRightsResource, '/groupObjectRights/<int:id>', endpoint='groupObjectRight')
+
+
+#object settings
+api.add_resource(ObjectSettingsListResource, '/objectSettings', endpoint='objectSettings')
+api.add_resource(ObjectSettingsResource, '/objectSettings/<int:id>', endpoint='objectSetting')
+
+#object views
+api.add_resource(ObjectViewsListResource, '/objectViews', endpoint='objectViews')
+api.add_resource(ObjectViewsResource, '/objectViews/<int:id>', endpoint='objectView')
 #start application
 if __name__ == '__main__':
     #u_s.get_user_roles()

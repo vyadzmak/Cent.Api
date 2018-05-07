@@ -54,7 +54,7 @@ class UserGroupSettingsResource(Resource):
             session.rollback()
             abort(400, message="Error while remove User Group Settings")
 
-    @marshal_with(user_groups_fields)
+    @marshal_with(user_group_settings)
     def put(self, id):
         try:
             json_data = request.get_json(force=True)
@@ -69,12 +69,12 @@ class UserGroupSettingsResource(Resource):
 
 
 class UserGroupSettingsListResource(Resource):
-    @marshal_with(user_groups_fields)
+    @marshal_with(user_group_settings)
     def get(self):
         user_groups = session.query(UserGroupSettings).all()
         return user_groups
 
-    @marshal_with(user_groups_fields)
+    @marshal_with(user_group_settings)
     def post(self):
         try:
             json_data = request.get_json(force=True)

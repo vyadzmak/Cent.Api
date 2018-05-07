@@ -302,6 +302,7 @@ class UserGroups(Base):
     group_name = Column('group_name', String(64))
     group_members = Column(postgresql.ARRAY(Integer))
     user_group_user_data = relationship('Users', backref="user_group_user_data")
+
     def __init__(self, user_creator_id, group_name):
         self.user_creator_id = user_creator_id
         self.created_date = datetime.datetime.now()
@@ -316,34 +317,113 @@ class UserGroupSettings(Base):
     id = Column(Integer, primary_key=True)
     group_id = Column('group_id', ForeignKey('user_groups.id'))
     data = Column('data', JSON)
-    user_group_data =  relationship('UserGroups', backref="user_group_data")
+    user_group_data = relationship('UserGroups', backref="user_group_data")
+
     def __init__(self, group_id, data=None):
         self.group_id = group_id
         self.data = data
 
+
 # object settings
 class ObjectSettings(Base):
-        __tablename__ = 'object_settings'
-        id = Column(Integer, primary_key=True)
-        object_id = Column('object_id', ForeignKey('objects.id'))
-        data = Column('data', JSON)
+    __tablename__ = 'object_settings'
+    id = Column(Integer, primary_key=True)
+    object_id = Column('object_id', ForeignKey('objects.id'))
+    data = Column('data', JSON)
 
-        def __init__(self, object_id, data=None):
-            self.object_id = object_id
-            self.data = data
+    def __init__(self, object_id, data=None):
+        self.object_id = object_id
+        self.data = data
+
 
 # object settings
 class ObjectViews(Base):
-            __tablename__ = 'object_views'
-            id = Column(Integer, primary_key=True)
-            object_id = Column('object_id', ForeignKey('objects.id'))
-            data = Column('data', JSON)
-            user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
-            def __init__(self, object_id,user_creator_id, data=None):
-                self.object_id = object_id
-                self.user_creator_id = user_creator_id
-                self.data = data
+    __tablename__ = 'object_views'
+    id = Column(Integer, primary_key=True)
+    object_id = Column('object_id', ForeignKey('objects.id'))
+    data = Column('data', JSON)
+    user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
 
+    def __init__(self, object_id, user_creator_id, data=None):
+        self.object_id = object_id
+        self.user_creator_id = user_creator_id
+        self.data = data
+
+
+# settings
+class Settings(Base):
+    __tablename__ = 'settings'
+    id = Column(Integer, primary_key=True)
+    name = Column('name',String(256))
+    value = Column('value',String(750))
+
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    # shared group objects
+class SharedGroupObjects(Base):
+        __tablename__ = 'shared_group_objects'
+        id = Column(Integer, primary_key=True)
+        shared_date = Column('shared_date', DateTime)
+        shared_user_id = Column('shared_user_id', ForeignKey('users.id'))
+        lock_state = Column('lock_state', Boolean)
+        object_id = Column('object_id', ForeignKey('objects.id'))
+        #это ID групп, а не пользователей
+        shared_members = Column(postgresql.ARRAY(Integer))
+        def __init__(self, shared_user_id, object_id):
+            self.shared_date = datetime.datetime.now()
+            self.lock_state = False
+            self.shared_user_id =shared_user_id
+            self.object_id = object_id
+            self.shared_members= []
+
+        # shared group objects
+class SharedUserObjects(Base):
+            __tablename__ = 'shared_user_objects'
+            id = Column(Integer, primary_key=True)
+            shared_date = Column('shared_date', DateTime)
+            shared_user_id = Column('shared_user_id', ForeignKey('users.id'))
+            lock_state = Column('lock_state', Boolean)
+            object_id = Column('object_id', ForeignKey('objects.id'))
+            # это ID пользователей, а не групп
+            shared_members = Column(postgresql.ARRAY(Integer))
+
+            def __init__(self, shared_user_id, object_id):
+                self.shared_date = datetime.datetime.now()
+                self.lock_state = False
+                self.shared_user_id = shared_user_id
+                self.object_id = object_id
+                self.shared_members = []
+
+            # group_object_rights
+class UserObjectRights(Base):
+                __tablename__ = 'user_object_rights'
+                id = Column(Integer, primary_key=True)
+                user_id = Column('user_id', ForeignKey('users.id'))
+                data = Column('data', JSON)
+                updated_date = Column('updated_date', DateTime)
+                user_creator_id = Column('user_creator_id', ForeignKey('users.id'))
+                object_id = Column('object_id', ForeignKey('objects.id'))
+
+                def __init__(self, user_id, user_creator_id, object_id, data=None):
+
+                    self.user_creator_id = user_creator_id
+                    self.user_id = user_id
+                    self.data = data
+                    self.updated_date = datetime.datetime.now()
+                    self.object_id = object_id
+
+# object settings
+class UserRouteAccess(Base):
+                    __tablename__ = 'user_route_access'
+                    id = Column(Integer, primary_key=True)
+
+                    data = Column('data', JSON)
+                    user_id = Column('user_id', ForeignKey('users.id'))
+                    def __init__(self, user_id, data=None):
+                        self.user_id = user_id
+                        self.data = data
 # main section
 if __name__ == "__main__":
     from sqlalchemy import create_engine

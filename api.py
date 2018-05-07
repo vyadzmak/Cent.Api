@@ -45,11 +45,15 @@ from res.user_group_settings_resources import *
 from res.group_object_rights_resources import *
 from res.object_settings_resources import *
 from res.object_views_resources import *
-
+from res.settings_resources import *
+from res.shared_group_object_resources import *
+from res.shared_user_object_resources import *
+from res.user_object_rights_resources import *
+from res.user_route_access_resources import *
 #add resources
 #user roles
 api.add_resource(UserRoleListResource, '/userRoles', endpoint='user-roles')
-api.add_resource(UserRoleResource, '/userRole/<int:id>', endpoint='user-role')
+api.add_resource(UserRoleResource, '/userRoles/<int:id>', endpoint='user-role')
 api.add_resource(AdminUserRoleListResource, '/adminUserRoles', endpoint='admin-user-role')
 
 #client types
@@ -69,7 +73,7 @@ api.add_resource(UserResource, '/user/<int:id>', endpoint='user')
 
 #user logins
 api.add_resource(UserLoginListResource, '/userLogins', endpoint='usersLogins')
-api.add_resource(UserLoginResource, '/userLogin/<int:id>', endpoint='userLogin')
+api.add_resource(UserLoginResource, '/userLogins/<int:id>', endpoint='userLogin')
 api.add_resource(UserAuthResource, '/login', endpoint='login')
 
 #log
@@ -81,7 +85,7 @@ api.add_resource(UploadFile, '/upload', endpoint='upload')
 #schemas
 api.add_resource(SchemaListResource, '/schemas', endpoint='schemas')
 api.add_resource(SchemaTypesListResource, '/schemaTypes', endpoint='schemasTypes')
-api.add_resource(SchemaResource, '/schema/<int:id>', endpoint='schema')
+api.add_resource(SchemaResource, '/schemas/<int:id>', endpoint='schema')
 
 #get to all schema catalogs
 api.add_resource(SchemaCatalogsListResource, '/schemaCatalogs/<int:clientId>', endpoint='schemaCatalogs')
@@ -157,6 +161,28 @@ api.add_resource(ObjectSettingsResource, '/objectSettings/<int:id>', endpoint='o
 #object views
 api.add_resource(ObjectViewsListResource, '/objectViews', endpoint='objectViews')
 api.add_resource(ObjectViewsResource, '/objectViews/<int:id>', endpoint='objectView')
+
+
+#object views
+api.add_resource(SettingsListResource, '/settings', endpoint='settings')
+api.add_resource(SettingsResource, '/settings/<int:id>', endpoint='setting')
+
+#shared user objects
+api.add_resource(SharedUserObjectsListResource, '/sharedUserObjects', endpoint='sharedUserObjects')
+api.add_resource(SharedUserObjectsResource, '/sharedUserObjects/<int:id>', endpoint='sharedUserObject')
+
+#shared group objects
+api.add_resource(SharedGroupObjectsListResource, '/sharedGroupObjects', endpoint='sharedGroupObjects')
+api.add_resource(SharedGroupObjectsResource, '/sharedGroupObjects/<int:id>', endpoint='sharedGroupObject')
+
+#user object rights
+api.add_resource(UserObjectRightsListResource, '/userObjectRights', endpoint='userObjectRights')
+api.add_resource(UserObjectRightsResource, '/userObjectRights/<int:id>', endpoint='userObjectRight')
+
+#user route access
+api.add_resource(UserRouteAccessListResource, '/userRouteAccess', endpoint='userRouteAccess')
+api.add_resource(UserRouteAccessResource, '/userRouteAccess/<int:id>', endpoint='userRouteAccessSingle')
+
 #start application
 if __name__ == '__main__':
     #u_s.get_user_roles()

@@ -30,6 +30,7 @@ client_info_fields = {
     'main_info': fields.String,
     'additional_info': fields.String,
     'email': fields.String,
+    'zip_code': fields.String,
     'location_coordinates': fields.List(fields.Float),
     'client_info_client': fields.Nested(client_fields)
 
@@ -92,6 +93,10 @@ class ClientInfoResource(Resource):
 
             if ('location_coordinates' in json_data) == True:
                 client_info.location_coordinates = json_data['location_coordinates']
+
+            if ('zip_code' in json_data) == True:
+                client_info.zip_code = json_data['zip_code']
+
             session.add(client_info)
             session.commit()
             return client_info, 201
@@ -121,6 +126,7 @@ class ClientInfoListResource(Resource):
             additional_info = None
             email = None,
             location_coordinates = None
+            zip_code = None
 
             if ('logo_attachment_id' in json_data) == True:
                 logo_attachment_id = json_data['logo_attachment_id']
@@ -149,11 +155,14 @@ class ClientInfoListResource(Resource):
             if ('location_coordinates' in json_data) == True:
                 location_coordinates = json_data['location_coordinates']
 
+            if ('zip_code' in json_data) == True:
+                zip_code = json_data['zip_code']
+
             client_info = ClientInfo(json_data['client_id'], logo_attachment_id=logo_attachment_id, address=address,
                                      main_phone_number=main_phone_number,
                                      additional_phone_number=additional_phone_number, site_url=site_url,
                                      main_info=main_info, additional_info=additional_info, email=email,
-                                     location_coordinates=location_coordinates)
+                                     location_coordinates=location_coordinates,zip_code=zip_code)
             session.add(client_info)
             session.commit()
             return client_info, 201

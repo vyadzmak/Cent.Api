@@ -258,10 +258,10 @@ class ClientInfo(Base):
     email = Column('email', String(64))
     location_coordinates = Column(postgresql.ARRAY(Float))
     client_info_client = relationship('Clients', backref="client_info_client")
-
+    zip_code = Column('zip_code', String(32))
     def __init__(self, client_id, logo_attachment_id=None, address=None, main_phone_number=None,
                  additional_phone_number=None, site_url=None, main_info=None, additional_info=None, email=None,
-                 location_coordinates=None):
+                 location_coordinates=None,zip_code =None):
         self.client_id = client_id
         self.logo_attachment_id = logo_attachment_id
         self.address = address
@@ -272,7 +272,7 @@ class ClientInfo(Base):
         self.additional_info = additional_info
         self.email = email
         self.location_coordinates = location_coordinates
-
+        self.zip_code = zip_code
 
 # group_object_rights
 class GroupObjectRights(Base):
